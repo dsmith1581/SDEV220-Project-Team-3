@@ -14,4 +14,4 @@ The inventory for Terre Haute has been added.
 A mock-up of the UI has been added to the documents
 folder along with the project UML.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
