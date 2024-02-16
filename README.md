@@ -1,7 +1,10 @@
 # SDEV220-Project-Team-3
 This branch is the progressive
 work completed and commited 
-during week 2. 
+during week 3. 
+
+NOTE - Must have openpyxl module installed to run program.
+(pip install openpyxl)
 
 ***
 
