@@ -2,8 +2,12 @@ from Campus import Campus
 from Equipment import Equipment
 
 class Building(Campus):
-    def __init__(self, building_name="Building", items=[]):
+    def __init__(self, building_name="Building", items=None):
         super().__init__(self)
+
+        # Initialialize items list inside object initialization to avoid using the same list across instances
+        if items == None:
+            items = []
         self.building_name = building_name
         self.items = items
 
@@ -47,12 +51,12 @@ class Building(Campus):
     def sort_by_room(self, items=None):
         if not items:
             items = self.items
-        return super().sort_by_department(items)
+        return super().sort_by_room(items)
     
     def sort_by_manufacturer(self, items=None):
         if not items:
             items = self.items
-        return super().sort_by_department(items)
+        return super().sort_by_manufacturer(items)
     
     def filter_by_name(self, name, items=None):
         if not items:
