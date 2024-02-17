@@ -1,8 +1,11 @@
 class Campus:
-    def __init__(self, location="Somewhere", id="501", buildings=[]):
+    def __init__(self, location="Somewhere", id="501", buildings=None):
         self.location = location
         self.id = id
-        self.buildings = buildings
+        if buildings == None:
+            self.buildings = []
+        else:
+            self.buildings = buildings
         self.sortedQuantity = False
         self.sortedName = False
         self.sortedDepartment = False

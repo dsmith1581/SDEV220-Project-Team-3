@@ -4,7 +4,7 @@ from Building import Building
 from Equipment import Equipment
 
 file_manager = FileManager()
-Ivy_Tech = file_manager.loadFile("Terre Haute-009917.xlsx")
+Ivy_Tech = file_manager.loadFile("Campus/Terre Haute-009917.xlsx")
 
 main_campus = Ivy_Tech.get_building("main")
 center_work_development = Ivy_Tech.get_building("center")

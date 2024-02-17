@@ -1,14 +1,16 @@
 import openpyxl
+import os
 from Campus import Campus
 from Building import Building
 from Equipment import Equipment
 
 class FileManager:
     
-    def loadFile(self, file):
-        campusInfo = file.split("-")
+    def loadFile(self, file_path):
+        file_name = os.path.basename(file_path)
+        campusInfo = file_name.split("-")
         campus = Campus(location=campusInfo[0], id=campusInfo[1])
-        current_file = openpyxl.load_workbook("Campus/" + file)
+        current_file = openpyxl.load_workbook(file_path)
         for sheet in current_file.get_sheet_names():
             # Get the sheet
             current_sheet = current_file[sheet]
