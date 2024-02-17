@@ -84,13 +84,18 @@ def create_window():
     # Set the theme
     root_window.tk.call("source", "theme/azure.tcl")
     root_window.tk.call("set_theme", "light")
+    root_window.iconbitmap("theme/logos/ivy_tech.ico")
 
     # Set the initial dimensions of the window to something small so it fits on most screens
     root_window.geometry("640x480")
 
     # Create an intro message
-    message_label = ttk.Label(root_window, text="Welcome to the Ivy Tech Inventory System")
-    message_label.pack(pady = (10,50));
+    message_label = ttk.Label(root_window, text = "Welcome to the Ivy Tech Inventory System")
+    message_label.pack(pady = (10, 20))
+    # And stick the logo below that
+    logo_image = tkinter.PhotoImage(file = "theme/logos/ivy_tech_full.ppm")
+    logo_label = tkinter.Label(root_window, image = logo_image)
+    logo_label.pack(pady = (0, 50))
 
     # Create some buttons to start with
     # Open an existing file
