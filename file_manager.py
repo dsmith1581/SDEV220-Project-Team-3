@@ -5,12 +5,13 @@ from building import Building
 from equipment import Equipment
 
 class FileManager:
-    
-    def loadFile(self, file_path):
+    # Load a file into memory
+    def load_file(self, file_path):
         file_name = os.path.basename(file_path)
         campusInfo = file_name.split("-")
         campus = Campus(location=campusInfo[0], id=campusInfo[1])
         current_file = openpyxl.load_workbook(file_path)
+
         for sheet in current_file.get_sheet_names():
             # Get the sheet
             current_sheet = current_file[sheet]
@@ -25,3 +26,5 @@ class FileManager:
                                             department=item_info[2], manufacturer=item_info[4], description=item_info[5]))
             campus.add_building(building)
         return campus
+
+    # TODO save_file(self, file_path, ...)

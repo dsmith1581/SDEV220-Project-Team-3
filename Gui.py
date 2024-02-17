@@ -134,7 +134,7 @@ def select_and_load_file():
 # Load a file
 def load_file(file_path):
     file_manager = FileManager()
-    campus = file_manager.loadFile(file_path)
+    campus = file_manager.load_file(file_path)
 
     # Switch to campus view
     clear_window()
