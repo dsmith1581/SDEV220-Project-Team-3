@@ -1,5 +1,5 @@
-from Campus import Campus
-from Equipment import Equipment
+from campus import Campus
+from equipment import Equipment
 
 class Building(Campus):
     def __init__(self, building_name="Building", items=None):

@@ -1,7 +1,7 @@
-from FileManager import FileManager
-from Campus import Campus
-from Building import Building
-from Equipment import Equipment
+from file_manager import FileManager
+from campus import Campus
+from building import Building
+from equipment import Equipment
 
 import tkinter
 from tkinter import filedialog
@@ -82,7 +82,7 @@ def create_window():
     root_window.title("Ivy Tech Inventory System")
 
     # Set the theme
-    root_window.tk.call("source", "./azure.tcl")
+    root_window.tk.call("source", "theme/azure.tcl")
     root_window.tk.call("set_theme", "light")
 
     # Set the initial dimensions of the window to something small so it fits on most screens

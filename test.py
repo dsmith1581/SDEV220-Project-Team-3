@@ -1,7 +1,7 @@
-from FileManager import FileManager
-from Campus import Campus
-from Building import Building
-from Equipment import Equipment
+from file_manager import FileManager
+from campus import Campus
+from building import Building
+from equipment import Equipment
 
 file_manager = FileManager()
 Ivy_Tech = file_manager.loadFile("Campus/Terre Haute-009917.xlsx")

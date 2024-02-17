@@ -1,8 +1,8 @@
 import openpyxl
 import os
-from Campus import Campus
-from Building import Building
-from Equipment import Equipment
+from campus import Campus
+from building import Building
+from equipment import Equipment
 
 class FileManager:
     
