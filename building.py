@@ -2,8 +2,11 @@
 # Ivy Tech Asset Manager - Building Class
 # Implements the building class which implements a location for rooms and assets under a Campus and functions to view these assets.
 
+import validations
+
 from campus import Campus
 from equipment import Equipment
+
 
 class Building(Campus):
     def __init__(self, building_name="Building", items=None):
@@ -11,9 +14,11 @@ class Building(Campus):
 
         # Initialialize items list inside object initialization to avoid using the same list across instances
         if items == None:
-            items = []
-        self.building_name = building_name
-        self.items = items
+            self.set_items([])
+        else:
+            self.set_items(items)
+        self.set_building_name(building_name)
+        
 
     ### Deleters
     def remove_item(self, item):
@@ -60,6 +65,11 @@ class Building(Campus):
     def add_item(self, item):
         if isinstance(item, Equipment):
             self.items.append(item)
+
+    def set_building_name(self, name):
+        if not validations.has_valid_characters(name):
+            raise ValueError(f"Building name '{name}' contains invalid characters")
+        self.building_name = name
 
     def set_items(self, items):
         self.items = items

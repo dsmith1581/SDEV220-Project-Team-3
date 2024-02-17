@@ -2,24 +2,31 @@
 # Ivy Tech Asset Manager - Campus class
 # Implements the Campus class which is the root view of an asset inventory.
 
+import validations
+
+
 class Campus:
+    # TODO - is location actually a string or a building object?
     def __init__(self, location="Somewhere", id="501", buildings=None):
+        # Re-uses setter functions to avoid duplicating validation logic
         self.location = location
-        self.id = id
+        self.set_id(id)
         if buildings == None:
-            self.buildings = []
+            self.set_buildings([])
         else:
-            self.buildings = buildings
-        self.sortedQuantity = False
-        self.sortedName = False
-        self.sortedDepartment = False
-        self.sortedManufacturer = False
-        self.sortedRoom = False
+            self.set_buildings(buildings)
+        self.sorted_quantity = False
+        self.sorted_name = False
+        self.sorted_department = False
+        self.sorted_manufacturer = False
+        self.sorted_room = False
+
 
     ### Deleters
     def remove_building(self, building):
         if building in self.buildings:
             self.buildings.remove(building)
+
 
     ### Filters
     def filter_by_department(self, department, items=None):
@@ -96,62 +103,67 @@ class Campus:
         if isinstance(buildings, list):
             self.buildings = buildings
 
+    def set_id(self, id):
+        if not validations.has_valid_characters(id):
+            raise ValueError(f"New campus id '{id}' contains invalid characters")
+        self.id = id
+
 
     ### Sorts
     def toggle_department_sort(self):
-        self.sortedQuantity = False
-        self.sortedName = False
-        self.sortedRoom = False
-        self.sortedManufacturer = False
-        if self.sortedDepartment:
-            self.sortedDepartment = False
+        self.sorted_quantity = False
+        self.sorted_name = False
+        self.sorted_room = False
+        self.sorted_manufacturer = False
+        if self.sorted_department:
+            self.sorted_department = False
         else:
-            self.sortedDepartment = True
+            self.sorted_department = True
 
     def toggle_manufacturer_sort(self):
-        self.sortedQuantity = False
-        self.sortedName = False
-        self.sortedDepartment = False
-        self.sortedRoom = False
-        if self.sortedManufacturer:
-            self.sortedManufacturer = False
+        self.sorted_quantity = False
+        self.sorted_name = False
+        self.sorted_department = False
+        self.sorted_room = False
+        if self.sorted_manufacturer:
+            self.sorted_manufacturer = False
         else:
-            self.sortedManufacturer = True
+            self.sorted_manufacturer = True
 
     def toggle_name_sort(self):
-        self.sortedQuantity = False
-        self.sortedDepartment = False
-        self.sortedRoom = False
-        self.sortedManufacturer = False
-        if self.sortedName:
-            self.sortedName = False
+        self.sorted_quantity = False
+        self.sorted_department = False
+        self.sorted_room = False
+        self.sorted_manufacturer = False
+        if self.sorted_name:
+            self.sorted_name = False
         else:
-            self.sortedName = True
+            self.sorted_name = True
     
     def toggle_quantity_sort(self):
-        self.sortedName = False
-        self.sortedDepartment = False
-        self.sortedRoom = False
-        self.sortedManufacturer = False
-        if self.sortedQuantity:
-            self.sortedQuantity = False
+        self.sorted_name = False
+        self.sorted_department = False
+        self.sorted_room = False
+        self.sorted_manufacturer = False
+        if self.sorted_quantity:
+            self.sorted_quantity = False
         else:
-            self.sortedQuantity = True
+            self.sorted_quantity = True
     
     def toggle_room_sort(self):
-        self.sortedQuantity = False
-        self.sortedName = False
-        self.sortedDepartment = False
-        self.sortedManufacturer = False
-        if self.sortedRoom:
-            self.sortedRoom = False
+        self.sorted_quantity = False
+        self.sorted_name = False
+        self.sorted_department = False
+        self.sorted_manufacturer = False
+        if self.sorted_room:
+            self.sorted_room = False
         else:
-            self.sortedRoom = True
+            self.sorted_room = True
 
     def sort_by_department(self, items = None):
         if not items:
             items = self.get_all_items_campus()
-        if self.sortedDepartment:
+        if self.sorted_department:
             filtered_items = sorted(items, key=lambda x: x.department[0], reverse=True)
         else:
             filtered_items = sorted(items, key=lambda x: x.department[0], reverse=False)
@@ -161,7 +173,7 @@ class Campus:
     def sort_by_manufacturer(self, items = None):
         if not items:
             items = self.get_all_items_campus()
-        if self.sortedManufacturer:
+        if self.sorted_manufacturer:
             filtered_items = sorted(items, key=lambda x: x.manufacturer, reverse=True)
         else:
             filtered_items = sorted(items, key=lambda x: x.manufacturer, reverse=False)
@@ -171,7 +183,7 @@ class Campus:
     def sort_by_name(self, items = None):
         if not items:
             items = self.get_all_items_campus()
-        if self.sortedName:
+        if self.sorted_name:
             filtered_items = sorted(items, key=lambda x: x.get_item_name(), reverse=True)
         else:
             filtered_items = sorted(items, key=lambda x: x.get_item_name(), reverse=False)
@@ -181,7 +193,7 @@ class Campus:
     def sort_by_room(self, items = None):
         if not items:
             items = self.get_all_items_campus()
-        if self.sortedRoom:
+        if self.sorted_room:
             filtered_items = sorted(items, key=lambda x: list(x.room_quantity.keys())[0], reverse=True)
         else:
             filtered_items = sorted(items, key=lambda x: list(x.room_quantity.keys())[0], reverse=False)
@@ -193,7 +205,7 @@ class Campus:
             print(items)
         if not items:
             items = self.get_all_items_campus()
-        if self.sortedQuantity:
+        if self.sorted_quantity:
             filtered_items = sorted(items, key=lambda x: x.get_total_quantity(), reverse=True)
         else:
             filtered_items = sorted(items, key=lambda x: x.get_total_quantity(), reverse=False)

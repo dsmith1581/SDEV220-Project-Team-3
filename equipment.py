@@ -2,14 +2,18 @@
 # Ivy Tech Asset Manager - Equipment class
 # Implements the equipment class which allows creating objects which represent assets in a given location
 
+import validations
+
+
 class Equipment:
     def __init__(self, item_name="Item", room_quantity={}, department=["TEST"], manufacturer="Debug", description="This is a test item."):
-        self.item_name = item_name
-        self.room_quantity = room_quantity
-        self.department = department
-        self.manufacturer = manufacturer
-        self.description = description
-        self.from_building = None
+        # Re-uses setter functions to avoid duplicating validation logic
+        self.set_item_name(item_name)
+        self.set_room_quantity(room_quantity)
+        self.set_department(department)
+        self.set_manufacturer(manufacturer)
+        self.set_description(description)
+        self.set_from_building(None)
 
 
     ### Deleters
@@ -56,25 +60,37 @@ class Equipment:
     def add_department(self, department):
         if isinstance(department, str):
             self.department.append(department)
+        else:
+            raise ValueError(f"Department {department} is an invalid value")
 
     def add_room(self, room, quantity):
         if isinstance(room, str) and isinstance(quantity, int):
             self.room_quantity[room] = quantity
 
     def set_department(self, department):
-        if isinstance(department, list):
-            self.department = department
+        if not validations.has_valid_characters(department):
+            raise ValueError(f"Item department '{department}' contains invalid characters")
+        # TODO: this check breaks the current test.py. Need to validate it is creating the departments before trying to assign them or change the way this logic works to do that automatically
+        #if isinstance(department, list):
+        self.department = department
+
 
     def set_description(self, description):
+        if not validations.has_valid_characters(description):
+            raise ValueError(f"Item description '{description}' contains invalid characters")
         self.description = description
 
     def set_from_building(self, building):
         self.from_building = building
 
     def set_item_name(self, name):
+        if not validations.has_valid_characters(name):
+            raise ValueError(f"Item name '{name}' contains invalid characters")
         self.item_name = name
 
     def set_manufacturer(self, manufacturer):
+        if not validations.has_valid_characters(manufacturer):
+            raise ValueError(f"Item manufacturer '{manufacturer}' contains invalid characters")
         self.manufacturer = manufacturer
     
     def set_room_quantity(self, room_quantity):
