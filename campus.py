@@ -1,3 +1,7 @@
+# Project Team 3 (Alexander Smith, Daniel Smith, John Sharp)
+# Ivy Tech Asset Manager - Campus class
+# Implements the Campus class which is the root view of an asset inventory.
+
 class Campus:
     def __init__(self, location="Somewhere", id="501", buildings=None):
         self.location = location

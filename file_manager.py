@@ -1,3 +1,7 @@
+# Project Team 3 (Alexander Smith, Daniel Smith, John Sharp)
+# Ivy Tech Asset Manager - File Manager
+# Provides functions to handle operations around the files containing asset inventories.
+
 import openpyxl
 import os
 from campus import Campus

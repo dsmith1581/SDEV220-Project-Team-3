@@ -1,3 +1,7 @@
+# Project Team 3 (Alexander Smith, Daniel Smith, John Sharp)
+# Ivy Tech Asset Manager - Building Class
+# Implements the building class which implements a location for rooms and assets under a Campus and functions to view these assets.
+
 from campus import Campus
 from equipment import Equipment
 

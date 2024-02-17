@@ -1,3 +1,7 @@
+# Project Team 3 (Alexander Smith, Daniel Smith, John Sharp)
+# Ivy Tech Asset Manager - Equipment class
+# Implements the equipment class which allows creating objects which represent assets in a given location
+
 class Equipment:
     def __init__(self, item_name="Item", room_quantity={}, department=["TEST"], manufacturer="Debug", description="This is a test item."):
         self.item_name = item_name

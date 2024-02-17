@@ -1,3 +1,7 @@
+# Project Team 3 (Alexander Smith, Daniel Smith, John Sharp)
+# Ivy Tech Asset Manager - GUI
+# Implements the GUI for the rest of the program.
+
 from file_manager import FileManager
 from campus import Campus
 from building import Building

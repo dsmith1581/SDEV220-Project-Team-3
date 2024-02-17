@@ -1,3 +1,7 @@
+# Project Team 3 (Alexander Smith, Daniel Smith, John Sharp)
+# Ivy Tech Asset Manager - Test Script
+# Development tool which enables testing functions to quickly validate the program is still working after changes
+
 from file_manager import FileManager
 from campus import Campus
 from building import Building
