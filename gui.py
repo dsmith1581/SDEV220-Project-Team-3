@@ -49,7 +49,9 @@ def campus_view(campus):
     # Building dropdown
     building_selection = tkinter.StringVar(root_window)
     building_selection.set(building_names[0])
-    building_menu = ttk.OptionMenu(root_window, tkinter.StringVar(value=current_building_name()), *building_names)
+
+    #building_menu = ttk.OptionMenu(root_window, tkinter.StringVar(value=current_building_name()), *building_names)
+    building_menu = ttk.OptionMenu(root_window, building_selection, building_selection.get(), *building_names)
 
     # Inventory add/remove buttons
     inventory_label = ttk.Label(root_window, text = "Inventory:")
@@ -73,6 +75,24 @@ def campus_view(campus):
     inventory_remove_button.grid(row = 2, column = 2, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
     asset_info.grid(             row = 3, column = 0, columnspan = 3, padx = (5, 5), pady = (0,  5), sticky = "nsew")
 
+    # Handle campus selection changes
+    def on_building_selection_change(*args):
+        nonlocal current_building_index
+        current_building_index = building_names.index(building_selection.get());
+        current_building = campus.get_building(current_building_name())
+        
+        # Update asset info
+        assets = current_building.get_items()
+        asset_details = ""
+        for asset in assets:
+            asset_details += asset.get_item_name() + "\n"
+
+        asset_info.delete(1.0, tkinter.END)
+        asset_info.insert(tkinter.END, asset_details)
+
+        return
+
+    building_selection.trace('w', on_building_selection_change)
 
 # Clears the contents of a window. Useful for switching views
 def clear_window():
