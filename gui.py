@@ -200,7 +200,7 @@ def numbered_lines(string):
     # Get the length of the final number string to know how much to pad the numbers to
     max_width = len(str(len(lines)))
     # Combine all the lines with their number and appropriate number of padding
-    result =  "\n".join(f"{str(i+1).rjust(max_width)}. {line}" for i, line in enumerate(lines))
+    result =  "\n".join(f"{str(i+1).rjust(max_width)}.  {line}" for i, line in enumerate(lines))
 
     return result
 
