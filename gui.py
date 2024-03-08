@@ -40,8 +40,13 @@ def campus_view(campus):
     assets = current_building.get_items()
     asset_details = ""
     for asset in assets:
-        asset_details += asset.get_item_name() + "\n"
-
+        # Check if this is not the first line being added
+        if asset_details != "":
+            # If not, make sure we've moved to a new line
+            asset_details += "\n"
+        # And then add the next line
+        asset_details += asset.get_item_name()
+    asset_details = numbered_lines(asset_details)
 
     # Create the widgets to be displayed, starting with the campus info
     campus_label = ttk.Label(root_window, text = campus_name)
@@ -61,7 +66,17 @@ def campus_view(campus):
     # Asset info output area
     asset_info = tkinter.scrolledtext.ScrolledText(root_window, font=("Courier", 10))
     asset_info.insert(tkinter.END, asset_details)
-    
+
+    # Back button
+    def go_back():
+        # Clear the window and load the initial view
+        clear_window()
+        main_view()
+
+        return
+
+    back_button = ttk.Button(root_window, text = "<- Back", command=go_back)
+
 
     # Configure grid expandability
     root_window.grid_rowconfigure(3, weight = 1)
@@ -69,11 +84,12 @@ def campus_view(campus):
 
     # Place items in grid
     campus_label.grid(           row = 0, column = 0, columnspan = 3, padx = (5, 0), pady = (0, 10), sticky = "w")
-    building_menu.grid(          row = 1, column = 0, columnspan = 3, padx = (5, 0), pady = (0, 10), sticky = "w")
+    back_button.grid(            row = 0, column = 3, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "nw")
+    building_menu.grid(          row = 1, column = 0, columnspan = 4, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_label.grid(        row = 2, column = 0, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_add_button.grid(   row = 2, column = 1, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_remove_button.grid(row = 2, column = 2, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
-    asset_info.grid(             row = 3, column = 0, columnspan = 3, padx = (5, 5), pady = (0,  5), sticky = "nsew")
+    asset_info.grid(             row = 3, column = 0, columnspan = 4, padx = (5, 5), pady = (0,  5), sticky = "nsew")
 
     # Handle campus selection changes
     def on_building_selection_change(*args):
@@ -86,6 +102,7 @@ def campus_view(campus):
         asset_details = ""
         for asset in assets:
             asset_details += asset.get_item_name() + "\n"
+        asset_details = numbered_lines(asset_details)
 
         asset_info.delete(1.0, tkinter.END)
         asset_info.insert(tkinter.END, asset_details)
@@ -99,6 +116,8 @@ def clear_window():
     for widget in root_window.winfo_children():
         widget.destroy();
 
+    return
+
 # Create the main window
 def create_window():
     global root_window
@@ -107,16 +126,27 @@ def create_window():
 
     # Set the theme
     root_window.tk.call("source", "theme/azure.tcl")
-    root_window.tk.call("set_theme", "light")
+    root_window.tk.call("set_theme", "dark")
     root_window.iconbitmap("theme/logos/ivy_tech.ico")
 
     # Set the initial dimensions of the window to something small so it fits on most screens
     root_window.geometry("640x480")
 
+    # Initialize to the main view
+    main_view()
+
+    # Run the application
+    root_window.mainloop()
+
+    return
+
+# Creates the initial view where you select which file to open
+def main_view():
     # Create an intro message
     message_label = ttk.Label(root_window, text = "Welcome to the Ivy Tech Inventory System")
     message_label.pack(pady = (10, 20))
     # And stick the logo below that
+    global logo_image
     logo_image = tkinter.PhotoImage(file = "theme/logos/ivy_tech_full.ppm")
     logo_label = tkinter.Label(root_window, image = logo_image)
     logo_label.pack(pady = (0, 50))
@@ -129,18 +159,32 @@ def create_window():
     new_file_button = ttk.Button(root_window, text = "New Inventory", command = new_inventory)
     new_file_button.pack(pady = 20, padx = 20)
 
-    # Run the application
-    root_window.mainloop()
+    return
 
 # Handles creating a new inventory
 def new_inventory():
     # TODO - implement new inventory creation process
     alert_unimplemented();
 
+    return
+
+# Adds right justified line numbers to a string
+def numbered_lines(string):
+    # Split the string into lines
+    lines = string.split("\n")
+    # Get the length of the final number string to know how much to pad the numbers to
+    max_width = len(str(len(lines)))
+    # Combine all the lines with their number and appropriate number of padding
+    result =  "\n".join(f"{str(i+1).rjust(max_width)}. {line}" for i, line in enumerate(lines))
+
+    return result
+
 # Popup window workflow to delete an inventory item
 def remove_inventory_workflow():
     # TODO - implement inventory workflow modal
     alert_unimplemented()
+
+    return
 
 # Handles selecting a file and loading the inventory from that
 def select_and_load_file():
@@ -152,6 +196,7 @@ def select_and_load_file():
     if file_path:
         load_file(file_path)
 
+    return
 
 
 ### Backend related functions
@@ -164,7 +209,8 @@ def load_file(file_path):
     clear_window()
     campus_view(campus)
 
+    return
 
 
-# Launch the GUI
+### Launch the GUI
 create_window()
