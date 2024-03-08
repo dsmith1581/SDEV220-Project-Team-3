@@ -18,14 +18,7 @@ from tkinter import ttk
 
 
 ### GUI related functions
-# Creates a modal view for defining a new inventory item
-def add_inventory_workflow():
-    # TODO - implement inventory workflow modal
-    alert_unimplemented()
-
-def alert_unimplemented():
-    tkinter.messagebox.showinfo("Unimplemented Function", "This functionality is not yet implemented!")
-
+# Converts the asset info in string form for reuse across display functions
 def assets_to_string(assets):
     asset_string = ""
     for asset in assets:
@@ -97,12 +90,18 @@ def campus_view(campus):
         current_building.remove_item(asset)
         
         # Fake a building selection change to reload the current building view
-        on_building_selection_change()
+        reload_building()
 
         return
 
+    # Adding an inventory item is a three step process: creation, addition, view refresh
+    def add_item_helper():
+        asset = new_asset()
+        current_building.add_item(asset)
+        reload_building()
+
     # Inventory row items
-    inventory_add_button = ttk.Button(root_window, text = "Add", command=add_inventory_workflow)
+    inventory_add_button = ttk.Button(root_window, text = "Add", command=add_item_helper)
     inventory_details_button = ttk.Button(root_window, text = "Details", command=inventory_details_helper)
     inventory_label = ttk.Label(root_window, text = "Inventory ID:")
     inventory_remove_button = ttk.Button(root_window, text = "Remove", command=remove_item)
@@ -138,7 +137,7 @@ def campus_view(campus):
     asset_info.grid(              row = 3, column = 0, columnspan = 5, padx = (5, 5), pady = (0,  5), sticky = "nsew")
 
     # Handle campus selection changes
-    def on_building_selection_change(*args):
+    def reload_building(*args):
         nonlocal current_building_index
         current_building_index = building_names.index(building_selection.get());
         current_building = campus.get_building(current_building_name())
@@ -153,14 +152,12 @@ def campus_view(campus):
         if max_value < 1:
             max_value = 1
 
-        print(max_value)
-
         inventory_spinbox.config(from_=1, to=max_value)
         inventory_spinbox.set(1)
 
         return
 
-    building_selection.trace('w', on_building_selection_change)
+    building_selection.trace('w', reload_building)
 
 # Clears the contents of a window. Useful for switching views
 def clear_window():
@@ -222,6 +219,75 @@ def main_view():
     new_file_button.pack(pady = 20, padx = 20)
 
     return
+
+# Handles creating a new asset
+def new_asset():
+    # Specify the validating regex strings
+    string_re =re.compile(r"""^[a-zA-Z0-9_\-, ]{1,}$""")
+    quantity_re = re.compile(r"""^[0-9]{1,}$""")
+
+    # Put the variables in scope and initialized
+    input_name = ""
+    input_description = ""
+    input_quantity_string = ""
+    input_manufacturer = ""
+    input_department = ""
+    input_room = ""
+
+    # Prompt the user for a valid input until one is given for each of the variables
+    while True:
+        input_name = tkinter.simpledialog.askstring("Input Name", """Enter the alphanumeric name e.g. "Cisco Switch":""", parent = root_window)
+
+        if input_name and string_re.match(input_name):
+            break
+        else:
+            tkinter.messagebox.showwarning("Invalid Input", "Please try again, paying attention to the input requirements")
+
+    while True:
+        input_description = tkinter.simpledialog.askstring("Input Description", """Enter the alphanumeric description e.g. "48 port network switch":""", parent = root_window)
+
+        if input_description and string_re.match(input_description):
+            break
+        else:
+            tkinter.messagebox.showwarning("Invalid Input", "Please try again, paying attention to the input requirements")
+
+    while True:
+        input_quantity_string = tkinter.simpledialog.askstring("Input Quantity", """Enter the numeric e.g. "6":""", parent = root_window)
+
+        if input_quantity_string and quantity_re.match(input_quantity_string) and int(input_quantity_string) > 0:
+            break
+        else:
+            tkinter.messagebox.showwarning("Invalid Input", "Please try again, paying attention to the input requirements")
+
+    while True:
+        input_manufacturer = tkinter.simpledialog.askstring("Input Manufacturer", """Enter the manufacturer e.g. "Cisco":""", parent = root_window)
+
+        if input_manufacturer and string_re.match(input_manufacturer):
+            break
+        else:
+            tkinter.messagebox.showwarning("Invalid Input", "Please try again, paying attention to the input requirements")
+
+    while True:
+        input_department = tkinter.simpledialog.askstring("Input Departemnt", """Enter the alphanumeric department name e.g. "AART":""", parent = root_window)
+
+        if input_department and string_re.match(input_department):
+            break
+        else:
+            tkinter.messagebox.showwarning("Invalid Input", "Please try again, paying attention to the input requirements")
+
+    while True:
+        input_room = tkinter.simpledialog.askstring("Input Room Name", """Enter the alphanumeric room name e.g. "A123":""", parent = root_window)
+
+        if input_room and string_re.match(input_room):
+            break
+        else:
+            tkinter.messagebox.showwarning("Invalid Input", "Please try again, paying attention to the input requirements")
+
+    # Quantity needs to be converted to an actual number
+    input_quantity = int(input_quantity_string)
+
+    # Make and return the asset
+    return Equipment(item_name=input_name, room_quantity={input_room: input_quantity}, department=input_department, manufacturer=input_manufacturer, description=input_description)
 
 # Handles creating a new inventory
 def new_inventory():
