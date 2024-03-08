@@ -69,22 +69,43 @@ def campus_view(campus):
             max_value = 1
     inventory_spinbox = ttk.Spinbox(root_window, from_=1, to=max_value, width=5)
     inventory_spinbox.set(1)
-
-    # Inventory buttons
-    inventory_label = ttk.Label(root_window, text = "Inventory ID:")
-    inventory_add_button = ttk.Button(root_window, text = "Add", command=add_inventory_workflow)
+    
     # The details button needs to call the inventory_details function with arguments
     def inventory_details_helper():
         # Skip when we have no items in an inventory yet
         if len(current_building.get_items()) == 0:
             return
+
         # Find some info about what the current asset is
-        current_index = int(inventory_spinbox.get())
+        current_index = int(inventory_spinbox.get()) - 1
         asset = current_building.get_items()[current_index]
         # Now call the actual inventory details function
         inventory_details(asset)
 
+        return
+
+    # The remove button needs to process the removal and update the view
+    def remove_item():
+        # Skip when we have no items in an inventory yet
+        if len(current_building.get_items()) == 0:
+            return
+
+        # Find some info about what the current asset is
+        current_index = int(inventory_spinbox.get()) - 1
+        asset = current_building.get_items()[current_index]
+        # Now actually remove said asset
+        current_building.remove_item(asset)
+        
+        # Fake a building selection change to reload the current building view
+        on_building_selection_change()
+
+        return
+
+    # Inventory row items
+    inventory_add_button = ttk.Button(root_window, text = "Add", command=add_inventory_workflow)
     inventory_details_button = ttk.Button(root_window, text = "Details", command=inventory_details_helper)
+    inventory_label = ttk.Label(root_window, text = "Inventory ID:")
+    inventory_remove_button = ttk.Button(root_window, text = "Remove", command=remove_item)
     
     # Asset info output area
     asset_info = tkinter.scrolledtext.ScrolledText(root_window, font=("Courier", 10))
@@ -106,14 +127,15 @@ def campus_view(campus):
     root_window.grid_columnconfigure(2, weight = 1)
 
     # Place items in grid
-    campus_label.grid(            row = 0, column = 0, columnspan = 3, padx = (5, 0), pady = (0, 10), sticky = "w")
-    back_button.grid(             row = 0, column = 3, columnspan = 1, padx = (0, 5), pady = (10, 0), sticky = "nw")
-    building_menu.grid(           row = 1, column = 0, columnspan = 3, padx = (5, 0), pady = (0, 10), sticky = "w")
+    campus_label.grid(            row = 0, column = 0, columnspan = 4, padx = (5, 0), pady = (0, 10), sticky = "w")
+    back_button.grid(             row = 0, column = 4, columnspan = 1, padx = (0, 5), pady = (10, 0), sticky = "nw")
+    building_menu.grid(           row = 1, column = 0, columnspan = 5, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_label.grid(         row = 2, column = 0, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_spinbox.grid(       row = 2, column = 1, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_details_button.grid(row = 2, column = 2, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_add_button.grid(    row = 2, column = 3, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
-    asset_info.grid(              row = 3, column = 0, columnspan = 4, padx = (5, 5), pady = (0,  5), sticky = "nsew")
+    inventory_remove_button.grid( row = 2, column = 4, columnspan = 1, padx = (5, 5), pady = (0, 10), sticky = "w")
+    asset_info.grid(              row = 3, column = 0, columnspan = 5, padx = (5, 5), pady = (0,  5), sticky = "nsew")
 
     # Handle campus selection changes
     def on_building_selection_change(*args):
