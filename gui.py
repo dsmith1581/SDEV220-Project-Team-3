@@ -25,8 +25,20 @@ def add_inventory_workflow():
 def alert_unimplemented():
     tkinter.messagebox.showinfo("Unimplemented Function", "This functionality is not yet implemented!")
 
+def assets_to_string(assets):
+    asset_string = ""
+    for asset in assets:
+        # Check if this is not the first line being added
+        if asset_string != "":
+            # If not, make sure we've moved to a new line
+            asset_string += "\n"
+        # And then add the next line
+        asset_string += asset.get_item_name()
+    return numbered_lines(asset_string)
+
 # Creates a view which contains the controls and outputs for a particular loaded campus
 def campus_view(campus):
+
     # Use the campus location as the display name
     campus_name = campus.get_location()
 
@@ -38,16 +50,7 @@ def campus_view(campus):
     current_building = campus.get_building(current_building_name())
 
     # Load the assets for that building
-    assets = current_building.get_items()
-    asset_details = ""
-    for asset in assets:
-        # Check if this is not the first line being added
-        if asset_details != "":
-            # If not, make sure we've moved to a new line
-            asset_details += "\n"
-        # And then add the next line
-        asset_details += asset.get_item_name()
-    asset_details = numbered_lines(asset_details)
+    asset_details = assets_to_string(current_building.get_items())
 
     # Create the widgets to be displayed, starting with the campus info
     campus_label = ttk.Label(root_window, text = campus_name)
@@ -99,12 +102,7 @@ def campus_view(campus):
         current_building = campus.get_building(current_building_name())
         
         # Update asset info
-        assets = current_building.get_items()
-        asset_details = ""
-        for asset in assets:
-            asset_details += asset.get_item_name() + "\n"
-        asset_details = numbered_lines(asset_details)
-
+        asset_details = assets_to_string(current_building.get_items())
         asset_info.delete(1.0, tkinter.END)
         asset_info.insert(tkinter.END, asset_details)
 
