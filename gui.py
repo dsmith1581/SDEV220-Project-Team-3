@@ -8,6 +8,7 @@ from building import Building
 from detect_theme import get_os_theme
 from equipment import Equipment
 
+import re
 import tkinter
 from tkinter import filedialog
 from tkinter import messagebox
@@ -163,8 +164,32 @@ def main_view():
 
 # Handles creating a new inventory
 def new_inventory():
-    # TODO - implement new inventory creation process
-    alert_unimplemented();
+    file_path = filedialog.asksaveasfilename(defaultextension = ".xlsx", filetypes = [("Excel Files", "*.xlsx")])
+
+    # If we didn't select a file then don't do anything
+    if not file_path:
+        tkinter.messagebox.showinfo("Inventory Creation Cancelled", "No new file was selected, cancelling creation of new inventory.")
+        return
+
+    # This function will be called when the button is clicked
+    buildings_input = tkinter.simpledialog.askstring("Input", """Enter a list of alphanumeric building names e.g. "Main Building,Student Life,Health Professions":""", parent = root_window)
+
+    # Bail if nothing was entered
+    if buildings_input == "":
+        tkinter.messagebox.showinfo("Inventory Creation Cancelled", "No building names entered, cancelling creation of new inventory.")
+        return
+
+    # Bail if incorrect values were entered
+    if not re.match(r"""^[a-zA-Z0-9_\-, ]{1,}$""", buildings_input):
+        tkinter.messagebox.showinfo("Inventory Creation Cancelled", "Building names had unsupported characters instead of alphanumeric, cancelling creation of new inventory.")
+        return
+
+    # Go create the actual Excel sheet now
+    file_manager = FileManager()
+    file_manager.create_file(file_path, buildings_input.split(","))
+
+    # And launch the gui on it automatically
+    load_file(file_path)
 
     return
 
