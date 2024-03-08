@@ -33,7 +33,7 @@ def assets_to_string(assets):
             # If not, make sure we've moved to a new line
             asset_string += "\n"
         # And then add the next line
-        asset_string += asset.get_item_name()
+        asset_string += asset.get_item_name() + " | " + asset.get_description()
     return numbered_lines(asset_string)
 
 # Creates a view which contains the controls and outputs for a particular loaded campus
@@ -88,7 +88,7 @@ def campus_view(campus):
 
     # Place items in grid
     campus_label.grid(           row = 0, column = 0, columnspan = 3, padx = (5, 0), pady = (0, 10), sticky = "w")
-    back_button.grid(            row = 0, column = 3, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "nw")
+    back_button.grid(            row = 0, column = 3, columnspan = 1, padx = (0, 5), pady = (10, 0), sticky = "nw")
     building_menu.grid(          row = 1, column = 0, columnspan = 4, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_label.grid(        row = 2, column = 0, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
     inventory_add_button.grid(   row = 2, column = 1, columnspan = 1, padx = (5, 0), pady = (0, 10), sticky = "w")
