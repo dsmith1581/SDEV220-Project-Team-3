@@ -5,6 +5,7 @@
 from file_manager import FileManager
 from campus import Campus
 from building import Building
+from detect_theme import get_os_theme
 from equipment import Equipment
 
 import tkinter
@@ -126,7 +127,8 @@ def create_window():
 
     # Set the theme
     root_window.tk.call("source", "theme/azure.tcl")
-    root_window.tk.call("set_theme", "dark")
+    # Dynamically detect the OS theme and set ours appropriately
+    root_window.tk.call("set_theme", get_os_theme())
     root_window.iconbitmap("theme/logos/ivy_tech.ico")
 
     # Set the initial dimensions of the window to something small so it fits on most screens
