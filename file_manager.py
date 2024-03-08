@@ -12,8 +12,7 @@ class FileManager:
     # Load a file into memory
     def load_file(self, file_path):
         file_name = os.path.basename(file_path)
-        campusInfo = file_name.split("-")
-        campus = Campus(location=campusInfo[0], id=campusInfo[1])
+        campus = Campus(location=file_name)
         current_file = openpyxl.load_workbook(file_path)
 
         for sheet in current_file.get_sheet_names():
